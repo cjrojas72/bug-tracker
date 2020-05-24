@@ -19,6 +19,7 @@
           <a href="/ticket/{{ ticket.id }}">{{ticket.title}}</a> | Status:
           {{ticket.status}} | Assigned to: | Created by:
           <a href="/profile/{{ ticket.author.id }}">{{ticket.author}}</a>
+          | Ticket Age: {{ticket.date}}
         </li>
         {% endfor %}
       </ul>
@@ -33,8 +34,9 @@
           {{ticket.status}} | Assigned to:
           <a href="/profile/{{ ticket.assigned_to.id }}"
             >{{ticket.assigned_to}}</a
-          >| Created by:
+          >| Reported by:
           <a href="/profile/{{ ticket.author.id }}">{{ticket.author}}</a>
+          | Ticket Age: {{ticket.date}}
         </li>
         {% endfor %}
       </ul>
@@ -46,12 +48,13 @@
         <li>
           # {{ticket.id}} | Title:
           <a href="/ticket/{{ ticket.id }}">{{ticket.title}}</a> | Status:
-          {{ticket.status}} | Assigned to:
-          <a href="/profile/{{ ticket.assigned_to.id }}"
-            >{{ticket.assigned_to}}</a
+          {{ticket.status}} | Completed by:
+          <a href="/profile/{{ ticket.completed_by.id }}"
+            >{{ticket.completed_by}}</a
           >
           | Created by:
           <a href="/profile/{{ ticket.author.id }}">{{ticket.author}}</a>
+          | Ticket Age: {{ticket.date}}
         </li>
         {% endfor %}
       </ul>

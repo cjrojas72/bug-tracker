@@ -7,7 +7,37 @@
   </head>
   <body>
     <a href="{% url 'home' %}">home</a>
-    <h1>{{ data.title }}</h1>
-    <a href="/profile/{{ data.author.id}}"><h2>{{ data.author }}</h2></a>
+    <h1>{{data.id}} | {{ data.title }}</h1>
+    <div class="dropdown">
+      <button>
+        Action
+      </button>
+      {% if data.completed_by %}
+      <ul class="dropdown-menu">
+        <li><a href="/reopen/{{data.id}}">Reopen</a></li>
+      </ul>
+      {% elif data.assigned_to %}
+      <ul class="dropdown-menu">
+        <li><a href="#">Edit</a></li>
+        <li><a href="/complete/{{data.id}}">Complete</a></li>
+        <li><a href="/returnticket/{{data.id}}">Return Ticket</a></li>
+        <li><a href="#">Mark Ticket as invalid</a></li>
+      </ul>
+      {% else %}
+      <ul class="dropdown-menu">
+        <li><a href="#">Edit</a></li>
+        <li><a href="/assign/{{data.id}}">Assign Ticket to You</a></li>
+        <li><a href="#">Mark Ticket as invalid</a></li>
+      </ul>
+      {% endif %}
+    </div>
+    <h3>Status: {{data.status}}</h3>
+    <h3>Description</h3>
+    <p>{{data.description}}</p>
+    <p>Submitted on: {{data.date}}</p>
+    <p>
+      Reported by:
+      <a href="/profile/{{ data.author.id}}">{{ data.author }}</a>
+    </p>
   </body>
 </html>

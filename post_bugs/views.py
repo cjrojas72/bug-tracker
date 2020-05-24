@@ -60,6 +60,40 @@ def ticketview(request, id):
     return render(request, 'ticketview.html', {'data': data})
 
 
+def assignticket(request, id):
+    data = Post.objects.get(id=id)
+    data.status = 'IP'
+    data.assigned_to = request.user
+    data.save()
+    return HttpResponseRedirect(reverse("home"))
+
+
+def returnticket(request, id):
+    data = Post.objects.get(id=id)
+    data.status = 'NW'
+    data.assigned_to = None
+    data.save()
+    return HttpResponseRedirect(reverse("home"))
+
+
+def completeticket(request, id):
+    data = Post.objects.get(id=id)
+    data.status = 'DN'
+    data.assigned_to = None
+    data.completed_by = request.user
+    data.save()
+    return HttpResponseRedirect(reverse("home"))
+
+
+def reopenticket(request, id):
+    data = Post.objects.get(id=id)
+    data.status = 'NW'
+    data.assigned_to = None
+    data.completed_by = None
+    data.save()
+    return HttpResponseRedirect(reverse("home"))
+
+
 def userview(request, id):
     author = CustUser.objects.get(id=id)
     posts = Post.objects.filter(author=author)
