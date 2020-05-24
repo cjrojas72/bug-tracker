@@ -3,18 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Bug Tracker</title>
   </head>
   <body>
+    <button><a href="/logout/">Logout</a></button>
     <h1>Ticket System</h1>
+    {{ request.user }}
     <button><a href="/addticket/">Post Ticket</a></button>
     <div id="new-ticket-div">
       <h2>New Tickets</h2>
       <ul>
         {% for ticket in new %}
         <li>
-          # {{ticket.id}} | Title: {{ticket.title}} | Status: {{ticket.status}}
-          | Assigned to: | Created by: {{ticket.author}}
+          # {{ticket.id}} | Title:
+          <a href="/ticket/{{ ticket.id }}">{{ticket.title}}</a> | Status:
+          {{ticket.status}} | Assigned to: | Created by:
+          <a href="/profile/{{ ticket.author.id }}">{{ticket.author}}</a>
         </li>
         {% endfor %}
       </ul>
@@ -24,9 +28,13 @@
       <ul>
         {% for ticket in in_progress %}
         <li>
-          # {{ticket.id}} | Title: {{ticket.title}} | Status: {{ticket.status}}
-          | Assigned to: {{ticket.assigned_to}} | Created by: {{ticket.author}}
-          | CB: {{ticket.completed_by}}
+          # {{ticket.id}} | Title:
+          <a href="/ticket/{{ ticket.id }}">{{ticket.title}}</a> | Status:
+          {{ticket.status}} | Assigned to:
+          <a href="/profile/{{ ticket.assigned_to.id }}"
+            >{{ticket.assigned_to}}</a
+          >| Created by:
+          <a href="/profile/{{ ticket.author.id }}">{{ticket.author}}</a>
         </li>
         {% endfor %}
       </ul>
@@ -36,9 +44,14 @@
       <ul>
         {% for ticket in done %}
         <li>
-          # {{ticket.id}} | Title: {{ticket.title}} | Status: {{ticket.status}}
-          | Assigned to: {{ticket.assigned_to}} | Created by: {{ticket.author}}
-          | CB: {{ticket.completed_by}}
+          # {{ticket.id}} | Title:
+          <a href="/ticket/{{ ticket.id }}">{{ticket.title}}</a> | Status:
+          {{ticket.status}} | Assigned to:
+          <a href="/profile/{{ ticket.assigned_to.id }}"
+            >{{ticket.assigned_to}}</a
+          >
+          | Created by:
+          <a href="/profile/{{ ticket.author.id }}">{{ticket.author}}</a>
         </li>
         {% endfor %}
       </ul>
