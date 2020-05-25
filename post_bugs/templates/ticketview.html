@@ -26,6 +26,10 @@
         <li><a href="/returnticket/{{data.id}}">Return Ticket</a></li>
         <li><a href="/invalidticket/{{data.id}}">Mark Ticket as Invalid</a></li>
       </ul>
+      {% elif data.status == 'IV' %}
+      <ul class="dropdown-menu">
+        <li><a href="/reopen/{{data.id}}">Reopen</a></li>
+      </ul>
       {% else %}
       <ul class="dropdown-menu">
         <li><a href="/edit/{{data.id}}">Edit</a></li>
