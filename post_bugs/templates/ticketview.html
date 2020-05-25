@@ -21,14 +21,14 @@
       </ul>
       {% elif data.assigned_to %}
       <ul class="dropdown-menu">
-        <li><a href="#">Edit</a></li>
+        <li><a href="/edit/{{data.id}}">Edit</a></li>
         <li><a href="/complete/{{data.id}}">Complete</a></li>
         <li><a href="/returnticket/{{data.id}}">Return Ticket</a></li>
         <li><a href="/invalidticket/{{data.id}}">Mark Ticket as Invalid</a></li>
       </ul>
       {% else %}
       <ul class="dropdown-menu">
-        <li><a href="#">Edit</a></li>
+        <li><a href="/edit/{{data.id}}">Edit</a></li>
         <li><a href="/assign/{{data.id}}">Assign Ticket to You</a></li>
         <li><a href="/invalidticket/{{data.id}}">Mark Ticket as Invalid</a></li>
       </ul>

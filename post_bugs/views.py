@@ -3,7 +3,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from post_bugs.models import CustUser, Post
-from post_bugs.forms import AddPostForm, LoginForm
+from post_bugs.forms import AddPostForm, LoginForm, EditForm
 from bug_tracker.settings import AUTH_USER_MODEL
 
 
@@ -26,13 +26,15 @@ def logoutview(request):
     return HttpResponseRedirect(reverse('login'))
 
 
-@login_required
 def index(request):
-    new_data = Post.objects.filter(status="NW")
-    inProgress_data = Post.objects.filter(status="IP")
-    done_data = Post.objects.filter(status="DN")
-    invalid_data = Post.objects.filter(status="IV")
-    return render(request, 'index.html', {'new': new_data, 'in_progress': inProgress_data, 'done': done_data, 'invalid': invalid_data})
+    if request.user.is_authenticated:
+        new_data = Post.objects.filter(status="NW")
+        inProgress_data = Post.objects.filter(status="IP")
+        done_data = Post.objects.filter(status="DN")
+        invalid_data = Post.objects.filter(status="IV")
+        return render(request, 'index.html', {'new': new_data, 'in_progress': inProgress_data, 'done': done_data, 'invalid': invalid_data})
+    else:
+        return HttpResponseRedirect(reverse('login'))
 
 
 @login_required
@@ -59,6 +61,25 @@ def add_ticket_view(request):
 def ticketview(request, id):
     data = Post.objects.get(id=id)
     return render(request, 'ticketview.html', {'data': data})
+
+
+def editticket(request, id):
+    ticket = Post.objects.get(id=id)
+    if request.method == "POST":
+        form = EditForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            ticket.title = data["title"]
+            ticket.description = data["description"]
+            ticket.save()
+            return HttpResponseRedirect(reverse('home'))
+
+    form = EditForm(initial={
+        "title": ticket.title,
+        "description": ticket.description
+    })
+
+    return render(request, 'edit.html', {"form": form, "ticket": ticket})
 
 
 def assignticket(request, id):
