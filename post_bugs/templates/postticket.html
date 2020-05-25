@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -10,5 +10,32 @@
       {% csrf_token %} {{ form.as_p }}
       <input type="submit" value="Submit!" />
     </form>
+  </body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin="anonymous"
+    />
+    <title>Submit Ticket</title>
+  </head>
+  <body>
+    <br />
+    <div class="container">
+      <h1>Submit a Ticket</h1>
+      <form action="/addticket/" method="POST">
+        <div class="form-group">
+          {% csrf_token %} {{ form }}
+        </div>
+        <input type="submit" value="Login" class="btn btn-primary" />
+      </form>
+    </div>
   </body>
 </html>

@@ -4,33 +4,120 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{ author.username }}</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin="anonymous"
+    />
   </head>
   <body>
     <a href="{% url 'home' %}">home</a>
-    <h1>{{ author.username }}</h1>
-    <h3>Filed Tickets</h3>
-    <ul>
-      {% for ticket in posts %}
-      <li>
-        <a href="/ticket/{{ ticket.id }}">{{ticket.title}}</a>
-      </li>
-      {% endfor %}
-    </ul>
-    <h3>In Progress Tickets</h3>
-    <ul>
-      {% for ticket in assigned %}
-      <li>
-        <a href="/ticket/{{ ticket.id }}">{{ticket.title}}</a>
-      </li>
-      {% endfor %}
-    </ul>
-    <h3>Completed Tickets</h3>
-    <ul>
-      {% for ticket in completed %}
-      <li>
-        <a href="/ticket/{{ ticket.id }}">{{ticket.title}}</a>
-      </li>
-      {% endfor %}
-    </ul>
+    <div class="container">
+      <div id="user-info-div" class="shadow p-3 mb-5 bg-white rounded">
+        <h1>{{ author.username }}</h1>
+        <h3>Name: {{ author.name }}</h3>
+        <h3>Email: {{ author.email }}</h3>
+      </div>
+      <div id="filed-div" class="shadow p-3 mb-5 bg-white rounded">
+        <h2>Filed Tickets</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Title</th>
+              <th scope="col">Assigned To</th>
+              <th scope="col">Reported By</th>
+              <th scope="col">Ticket Age</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ticket in posts %}
+            <tr>
+              <th scope="row">{{ ticket.id }}</th>
+              <td><a href="/ticket/{{ ticket.id }}">{{ticket.title}}</a></td>
+              <td>
+                {% if ticket.assigned_to %}
+                <a href="/profile/{{ ticket.assigned_to.id}}"
+                  >{{ticket.assigned_to}}</a
+                >
+                {% else %} None {% endif %}
+              </td>
+              <td>
+                <a href="/profile/{{ ticket.author.id }}">{{ticket.author}}</a>
+              </td>
+              <td>{{ ticket.date }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div id="in-progress-div" class="shadow p-3 mb-5 bg-white rounded">
+        <h2>In Progress Tickets</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Title</th>
+              <th scope="col">Assigned To</th>
+              <th scope="col">Reported By</th>
+              <th scope="col">Ticket Age</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ticket in assigned %}
+            <tr>
+              <th scope="row">{{ ticket.id }}</th>
+              <td><a href="/ticket/{{ ticket.id }}">{{ticket.title}}</a></td>
+              <td>
+                {% if ticket.assigned_to %}
+                <a href="/profile/{{ ticket.assigned_to.id}}"
+                  >{{ticket.assigned_to}}</a
+                >
+                {% else %} None {% endif %}
+              </td>
+              <td>
+                <a href="/profile/{{ ticket.author.id }}">{{ticket.author}}</a>
+              </td>
+              <td>{{ ticket.date }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div id="completed-div" class="shadow p-3 mb-5 bg-white rounded">
+        <h2>Completed Tickets</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Title</th>
+              <th scope="col">Assigned To</th>
+              <th scope="col">Reported By</th>
+              <th scope="col">Ticket Age</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ticket in completed %}
+            <tr>
+              <th scope="row">{{ ticket.id }}</th>
+              <td><a href="/ticket/{{ ticket.id }}">{{ticket.title}}</a></td>
+              <td>
+                {% if ticket.assigned_to %}
+                <a href="/profile/{{ ticket.assigned_to.id}}"
+                  >{{ticket.assigned_to}}</a
+                >
+                {% else %} None {% endif %}
+              </td>
+              <td>
+                <a href="/profile/{{ ticket.author.id }}">{{ticket.author}}</a>
+              </td>
+              <td>{{ ticket.date }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </body>
 </html>

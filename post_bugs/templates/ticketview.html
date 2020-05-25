@@ -4,47 +4,108 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{ data.title }}</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin="anonymous"
+    />
   </head>
   <body>
-    <a href="{% url 'home' %}">home</a>
-    <h1>{{data.id}} | {{ data.title }}</h1>
-    {% if data.assigned_to %}
-    <h3>Assigned to: {{data.assigned_to}}</h3>
-    {% endif %}
-    <div class="dropdown">
-      <button>
-        Action
-      </button>
-      {% if data.completed_by %}
-      <ul class="dropdown-menu">
-        <li><a href="/reopen/{{data.id}}">Reopen</a></li>
-      </ul>
-      {% elif data.assigned_to %}
-      <ul class="dropdown-menu">
-        <li><a href="/edit/{{data.id}}">Edit</a></li>
-        <li><a href="/complete/{{data.id}}">Complete</a></li>
-        <li><a href="/returnticket/{{data.id}}">Return Ticket</a></li>
-        <li><a href="/invalidticket/{{data.id}}">Mark Ticket as Invalid</a></li>
-      </ul>
-      {% elif data.status == 'IV' %}
-      <ul class="dropdown-menu">
-        <li><a href="/reopen/{{data.id}}">Reopen</a></li>
-      </ul>
-      {% else %}
-      <ul class="dropdown-menu">
-        <li><a href="/edit/{{data.id}}">Edit</a></li>
-        <li><a href="/assign/{{data.id}}">Assign Ticket to You</a></li>
-        <li><a href="/invalidticket/{{data.id}}">Mark Ticket as Invalid</a></li>
-      </ul>
-      {% endif %}
+    <div class="container">
+      <a href="{% url 'home' %}">home</a>
+      <div id="box" class="shadow p-3 mb-5 bg-white rounded">
+        <div class="row">
+          <h1 class="d-inline p-2 ml-3 mr-3 bg-dark text-white">{{data.id}}</h1>
+          <h1 class="flex-grow-1">{{ data.title }}</h1>
+          {% if data.assigned_to %}
+          <div class="d-flex flex-column mr-5">
+            <h3>Assigned to:</h3>
+            <h4>
+              <a href="/profile/{{ data.author.id }}">{{ data.author }}</a>
+            </h4>
+          </div>
+          {% endif %}
+          <div class="dropdown">
+            <button
+              class="mr-3 ml-2 btn btn-primary dropdown-toggle"
+              type="button"
+              id="dropdownMenuButton"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Actions
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              {% if data.completed_by %}
+              <a class="dropdown-item" href="/reopen/{{data.id}}">Reopen</a>
+              {% elif data.assigned_to %}
+              <a class="dropdown-item" href="/edit/{{data.id}}">Edit</a>
+              <a class="dropdown-item" href="/complete/{{data.id}}">Complete</a>
+              <a class="dropdown-item" href="/returnticket/{{data.id}}"
+                >Return Ticket</a
+              >
+              <a class="dropdown-item" href="/invalidticket/{{data.id}}"
+                >Mark Ticket as Invalid</a
+              >
+              {% elif data.status == 'IV' %}
+              <a class="dropdown-item" href="/reopen/{{data.id}}">Reopen</a>
+              {% else %}
+              <a class="dropdown-item" href="/edit/{{data.id}}">Edit</a>
+              <a class="dropdown-item" href="/assign/{{data.id}}"
+                >Assign Ticket to You</a
+              >
+              <a class="dropdown-item" href="/invalidticket/{{data.id}}"
+                >Mark Ticket as Invalid</a
+              >
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <hr />
+        <div class="row ml-3 mt-5">
+          <div id="info-div">
+            <h3>Info</h3>
+            <hr />
+            <p>Status: {{data.status}}</p>
+            <hr style="width: 50%;" />
+            <p>Submitted on: {{data.date}}</p>
+            <hr style="width: 50%;" />
+            <p>
+              Reported by:
+              <a href="/profile/{{ data.author.id}}">{{ data.author }}</a>
+            </p>
+            {% if data.completed_by %}
+            <p>
+              Completed by:
+              <a href="/profile/{{ data.completed_by.id}}"
+                >{{ data.completed_by }}</a
+              >
+            </p>
+            {% endif %}
+          </div>
+          <div class="description-div ml-5">
+            <h3>Description</h3>
+            <p>{{ data.description }}</p>
+          </div>
+        </div>
+      </div>
     </div>
-    <h3>Status: {{data.status}}</h3>
-    <h3>Description</h3>
-    <p>{{data.description}}</p>
-    <p>Submitted on: {{data.date}}</p>
-    <p>
-      Reported by:
-      <a href="/profile/{{ data.author.id}}">{{ data.author }}</a>
-    </p>
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+      integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>
