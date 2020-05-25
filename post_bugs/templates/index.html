@@ -20,6 +20,10 @@
       <h3 class="d-flex justify-content-center text-info">
         Welcome {{ request.user }}!
       </h3>
+      <p>
+        <strong>View your tickets:</strong
+        ><a href="/profile/{{ request.user.id }}">Tickets</a>
+      </p>
       <div class="row d-flex justify-content-end">
         <button type="button" class="btn btn-primary mr-3 mb-3">
           <a href="/addticket/" class="text-decoration-none text-white"
