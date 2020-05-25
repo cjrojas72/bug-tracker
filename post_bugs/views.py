@@ -98,7 +98,8 @@ def editticket(request, id):
             ticket.title = data["title"]
             ticket.description = data["description"]
             ticket.save()
-            return HttpResponseRedirect(reverse('home'))
+            url = ('/ticket/{}').format(id)
+            return HttpResponseRedirect(url)
 
     form = EditForm(initial={
         "title": ticket.title,
@@ -114,7 +115,8 @@ def assignticket(request, id):
     data.status = 'IP'
     data.assigned_to = request.user
     data.save()
-    return HttpResponseRedirect(reverse("home"))
+    url = ('/ticket/{}').format(id)
+    return HttpResponseRedirect(url)
 
 
 @login_required
@@ -123,7 +125,8 @@ def returnticket(request, id):
     data.status = 'NW'
     data.assigned_to = None
     data.save()
-    return HttpResponseRedirect(reverse("home"))
+    url = ('/ticket/{}').format(id)
+    return HttpResponseRedirect(url)
 
 
 @login_required
@@ -133,7 +136,8 @@ def completeticket(request, id):
     data.assigned_to = None
     data.completed_by = request.user
     data.save()
-    return HttpResponseRedirect(reverse("home"))
+    url = ('/ticket/{}').format(id)
+    return HttpResponseRedirect(url)
 
 
 @login_required
@@ -143,7 +147,8 @@ def reopenticket(request, id):
     data.assigned_to = None
     data.completed_by = None
     data.save()
-    return HttpResponseRedirect(reverse("home"))
+    url = ('/ticket/{}').format(id)
+    return HttpResponseRedirect(url)
 
 
 @login_required
@@ -153,7 +158,8 @@ def invalidticket(request, id):
     data.assigned_to = None
     data.completed_by = None
     data.save()
-    return HttpResponseRedirect(reverse("home"))
+    url = ('/ticket/{}').format(id)
+    return HttpResponseRedirect(url)
 
 
 @login_required
