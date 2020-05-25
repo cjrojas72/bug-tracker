@@ -17,5 +17,7 @@ class LoginForm(forms.Form):
 
 
 class EditForm(forms.Form):
-    title = forms.CharField(max_length=30)
-    description = forms.CharField(widget=forms.Textarea)
+    title = forms.CharField(label='Title', max_length=30, widget=forms.TextInput(
+        attrs={'class': 'form-control'}))
+    description = forms.CharField(label='Description', max_length=300, widget=forms.Textarea(
+        attrs={'class': 'form-control'}))

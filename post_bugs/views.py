@@ -159,7 +159,17 @@ def invalidticket(request, id):
 @login_required
 def userview(request, id):
     author = CustUser.objects.get(id=id)
-    posts = Post.objects.filter(author=author)
-    in_progress = Post.objects.filter(assigned_to=author)
-    completed = Post.objects.filter(completed_by=author)
-    return render(request, 'userview.html', {'author': author, 'posts': posts, 'assigned': in_progress, 'completed': completed})
+    posts = Post.objects.filter(author=author).order_by('-date')
+    age(posts)
+    in_progress = Post.objects.filter(assigned_to=author).order_by('-date')
+    age(in_progress)
+    completed = Post.objects.filter(completed_by=author).order_by('-date')
+    age(completed)
+
+    tickets = {
+        "filed": posts,
+        "inP": in_progress,
+        "completed": completed,
+    }
+
+    return render(request, 'userview.html', {'tickets': tickets, 'author': author})

@@ -13,7 +13,14 @@
   </head>
   <body>
     <div class="container">
-      <a href="{% url 'home' %}">home</a>
+      <button class="btn btn-secondary mt-3">
+        <a href="/logout/" class="text-decoration-none text-white">Logout</a>
+      </button>
+      <button class="btn btn-primary mt-3">
+        <a href="{% url 'home' %}" class="text-decoration-none text-white"
+          >Home</a
+        >
+      </button>
       <div id="box" class="shadow p-3 mb-5 bg-white rounded">
         <div class="row">
           <h1 class="d-inline p-2 ml-3 mr-3 bg-dark text-white">{{data.id}}</h1>
@@ -46,6 +53,7 @@
               <a class="dropdown-item" href="/returnticket/{{data.id}}"
                 >Return Ticket</a
               >
+              <hr />
               <a class="dropdown-item" href="/invalidticket/{{data.id}}"
                 >Mark Ticket as Invalid</a
               >
@@ -56,6 +64,7 @@
               <a class="dropdown-item" href="/assign/{{data.id}}"
                 >Assign Ticket to You</a
               >
+              <hr />
               <a class="dropdown-item" href="/invalidticket/{{data.id}}"
                 >Mark Ticket as Invalid</a
               >

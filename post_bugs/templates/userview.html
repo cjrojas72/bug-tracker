@@ -14,6 +14,14 @@
   <body>
     <a href="{% url 'home' %}">home</a>
     <div class="container">
+      <button class="btn btn-secondary mt-3">
+        <a href="/logout/" class="text-decoration-none text-white">Logout</a>
+      </button>
+      <button class="btn btn-primary mt-3">
+        <a href="{% url 'home' %}" class="text-decoration-none text-white"
+          >Home</a
+        >
+      </button>
       <div id="user-info-div" class="shadow p-3 mb-5 bg-white rounded">
         <h1>{{ author.username }}</h1>
         <h3>Name: {{ author.name }}</h3>
@@ -32,7 +40,7 @@
             </tr>
           </thead>
           <tbody>
-            {% for ticket in posts %}
+            {% for ticket in tickets.filed %}
             <tr>
               <th scope="row">{{ ticket.id }}</th>
               <td><a href="/ticket/{{ ticket.id }}">{{ticket.title}}</a></td>
@@ -65,7 +73,7 @@
             </tr>
           </thead>
           <tbody>
-            {% for ticket in assigned %}
+            {% for ticket in tickets.inP %}
             <tr>
               <th scope="row">{{ ticket.id }}</th>
               <td><a href="/ticket/{{ ticket.id }}">{{ticket.title}}</a></td>
@@ -98,7 +106,7 @@
             </tr>
           </thead>
           <tbody>
-            {% for ticket in completed %}
+            {% for ticket in tickets.completed %}
             <tr>
               <th scope="row">{{ ticket.id }}</th>
               <td><a href="/ticket/{{ ticket.id }}">{{ticket.title}}</a></td>
