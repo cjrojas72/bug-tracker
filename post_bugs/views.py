@@ -31,7 +31,8 @@ def index(request):
     new_data = Post.objects.filter(status="NW")
     inProgress_data = Post.objects.filter(status="IP")
     done_data = Post.objects.filter(status="DN")
-    return render(request, 'index.html', {'new': new_data, 'in_progress': inProgress_data, 'done': done_data})
+    invalid_data = Post.objects.filter(status="IV")
+    return render(request, 'index.html', {'new': new_data, 'in_progress': inProgress_data, 'done': done_data, 'invalid': invalid_data})
 
 
 @login_required
@@ -94,7 +95,18 @@ def reopenticket(request, id):
     return HttpResponseRedirect(reverse("home"))
 
 
+def invalidticket(request, id):
+    data = Post.objects.get(id=id)
+    data.status = 'IV'
+    data.assigned_to = None
+    data.completed_by = None
+    data.save()
+    return HttpResponseRedirect(reverse("home"))
+
+
 def userview(request, id):
     author = CustUser.objects.get(id=id)
     posts = Post.objects.filter(author=author)
-    return render(request, 'userview.html', {'author': author, 'posts': posts})
+    in_progress = Post.objects.filter(assigned_to=author)
+    completed = Post.objects.filter(completed_by=author)
+    return render(request, 'userview.html', {'author': author, 'posts': posts, 'assigned': in_progress, 'completed': completed})

@@ -59,5 +59,19 @@
         {% endfor %}
       </ul>
     </div>
+    <div id="invalid-ticket-div">
+      <h2>Invalid Tickets</h2>
+      <ul>
+        {% for ticket in invalid %}
+        <li>
+          # {{ticket.id}} | Title:
+          <a href="/ticket/{{ ticket.id }}">{{ticket.title}}</a> | Status:
+          {{ticket.status}} | Assigned to: | Created by:
+          <a href="/profile/{{ ticket.author.id }}">{{ticket.author}}</a>
+          | Ticket Age: {{ticket.date}}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
   </body>
 </html>

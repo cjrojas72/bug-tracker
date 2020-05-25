@@ -9,6 +9,7 @@ urlpatterns = [
     path('returnticket/<int:id>', views.returnticket, name="return"),
     path('complete/<int:id>', views.completeticket, name="complete"),
     path('reopen/<int:id>', views.reopenticket, name="reopen"),
+    path('invalidticket/<int:id>', views.invalidticket, name="invalid"),
     path('profile/<int:id>', views.userview),
     path('login/', views.loginview, name="login"),
     path('logout/', views.logoutview),

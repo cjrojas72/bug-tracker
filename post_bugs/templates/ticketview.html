@@ -8,6 +8,9 @@
   <body>
     <a href="{% url 'home' %}">home</a>
     <h1>{{data.id}} | {{ data.title }}</h1>
+    {% if data.assigned_to %}
+    <h3>Assigned to: {{data.assigned_to}}</h3>
+    {% endif %}
     <div class="dropdown">
       <button>
         Action
@@ -21,13 +24,13 @@
         <li><a href="#">Edit</a></li>
         <li><a href="/complete/{{data.id}}">Complete</a></li>
         <li><a href="/returnticket/{{data.id}}">Return Ticket</a></li>
-        <li><a href="#">Mark Ticket as invalid</a></li>
+        <li><a href="/invalidticket/{{data.id}}">Mark Ticket as Invalid</a></li>
       </ul>
       {% else %}
       <ul class="dropdown-menu">
         <li><a href="#">Edit</a></li>
         <li><a href="/assign/{{data.id}}">Assign Ticket to You</a></li>
-        <li><a href="#">Mark Ticket as invalid</a></li>
+        <li><a href="/invalidticket/{{data.id}}">Mark Ticket as Invalid</a></li>
       </ul>
       {% endif %}
     </div>

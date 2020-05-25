@@ -8,8 +8,25 @@
   <body>
     <a href="{% url 'home' %}">home</a>
     <h1>{{ author.username }}</h1>
+    <h3>Filed Tickets</h3>
     <ul>
       {% for ticket in posts %}
+      <li>
+        <a href="/ticket/{{ ticket.id }}">{{ticket.title}}</a>
+      </li>
+      {% endfor %}
+    </ul>
+    <h3>In Progress Tickets</h3>
+    <ul>
+      {% for ticket in assigned %}
+      <li>
+        <a href="/ticket/{{ ticket.id }}">{{ticket.title}}</a>
+      </li>
+      {% endfor %}
+    </ul>
+    <h3>Completed Tickets</h3>
+    <ul>
+      {% for ticket in completed %}
       <li>
         <a href="/ticket/{{ ticket.id }}">{{ticket.title}}</a>
       </li>
