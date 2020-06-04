@@ -5,6 +5,17 @@ from django.contrib.auth.models import User
 from post_bugs.models import CustUser, Post
 from post_bugs.forms import AddPostForm, LoginForm, EditForm
 from bug_tracker.settings import AUTH_USER_MODEL
+from django.utils import timezone, dateformat
+
+
+def age(tickets):
+    for ticket in tickets:
+        age = timezone.now() - ticket.date
+        if int(age.days) < 1:
+            ticket.date = "Today"
+        else:
+            ticket.date = ("{} day(s)").format(age.days)
+    return tickets
 
 
 def loginview(request):
@@ -28,11 +39,24 @@ def logoutview(request):
 
 def index(request):
     if request.user.is_authenticated:
-        new_data = Post.objects.filter(status="NW")
-        inProgress_data = Post.objects.filter(status="IP")
-        done_data = Post.objects.filter(status="DN")
-        invalid_data = Post.objects.filter(status="IV")
-        return render(request, 'index.html', {'new': new_data, 'in_progress': inProgress_data, 'done': done_data, 'invalid': invalid_data})
+        new_data = Post.objects.filter(status="NW").order_by('-date')
+        age(new_data)
+        inProgress_data = Post.objects.filter(
+            status="IP").order_by('-date')
+        age(inProgress_data)
+        done_data = Post.objects.filter(status="DN").order_by('-date')
+        age(done_data)
+        invalid_data = Post.objects.filter(status="IV").order_by('-date')
+        age(invalid_data)
+
+        tickets = {
+            "new": new_data,
+            "inP": inProgress_data,
+            "done": done_data,
+            "invalid": invalid_data
+        }
+
+        return render(request, 'index.html', {"tickets": tickets})
     else:
         return HttpResponseRedirect(reverse('login'))
 
@@ -58,11 +82,13 @@ def add_ticket_view(request):
     return render(request, 'postticket.html', {"form": form})
 
 
+@login_required
 def ticketview(request, id):
     data = Post.objects.get(id=id)
     return render(request, 'ticketview.html', {'data': data})
 
 
+@login_required
 def editticket(request, id):
     ticket = Post.objects.get(id=id)
     if request.method == "POST":
@@ -72,7 +98,8 @@ def editticket(request, id):
             ticket.title = data["title"]
             ticket.description = data["description"]
             ticket.save()
-            return HttpResponseRedirect(reverse('home'))
+            url = ('/ticket/{}').format(id)
+            return HttpResponseRedirect(url)
 
     form = EditForm(initial={
         "title": ticket.title,
@@ -82,52 +109,73 @@ def editticket(request, id):
     return render(request, 'edit.html', {"form": form, "ticket": ticket})
 
 
+@login_required
 def assignticket(request, id):
     data = Post.objects.get(id=id)
     data.status = 'IP'
     data.assigned_to = request.user
     data.save()
-    return HttpResponseRedirect(reverse("home"))
+    url = ('/ticket/{}').format(id)
+    return HttpResponseRedirect(url)
 
 
+@login_required
 def returnticket(request, id):
     data = Post.objects.get(id=id)
     data.status = 'NW'
     data.assigned_to = None
     data.save()
-    return HttpResponseRedirect(reverse("home"))
+    url = ('/ticket/{}').format(id)
+    return HttpResponseRedirect(url)
 
 
+@login_required
 def completeticket(request, id):
     data = Post.objects.get(id=id)
     data.status = 'DN'
     data.assigned_to = None
     data.completed_by = request.user
     data.save()
-    return HttpResponseRedirect(reverse("home"))
+    url = ('/ticket/{}').format(id)
+    return HttpResponseRedirect(url)
 
 
+@login_required
 def reopenticket(request, id):
     data = Post.objects.get(id=id)
     data.status = 'NW'
     data.assigned_to = None
     data.completed_by = None
     data.save()
-    return HttpResponseRedirect(reverse("home"))
+    url = ('/ticket/{}').format(id)
+    return HttpResponseRedirect(url)
 
 
+@login_required
 def invalidticket(request, id):
     data = Post.objects.get(id=id)
     data.status = 'IV'
     data.assigned_to = None
     data.completed_by = None
     data.save()
-    return HttpResponseRedirect(reverse("home"))
+    url = ('/ticket/{}').format(id)
+    return HttpResponseRedirect(url)
 
 
+@login_required
 def userview(request, id):
     author = CustUser.objects.get(id=id)
-    posts = Post.objects.filter(author=author)
-    in_progress = Post.objects.filter(assigned_to=author)
-    completed = Post.objects.filter(completed_by=author)
-    return render(request, 'userview.html', {'author': author, 'posts': posts, 'assigned': in_progress, 'completed': completed})
+    posts = Post.objects.filter(author=author).order_by('-date')
+    age(posts)
+    in_progress = Post.objects.filter(assigned_to=author).order_by('-date')
+    age(in_progress)
+    completed = Post.objects.filter(completed_by=author).order_by('-date')
+    age(completed)
+
+    tickets = {
+        "filed": posts,
+        "inP": in_progress,
+        "completed": completed,
+    }
+
+    return render(request, 'userview.html', {'tickets': tickets, 'author': author})

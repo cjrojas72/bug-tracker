@@ -3,75 +3,158 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin="anonymous"
+    />
     <title>Bug Tracker</title>
   </head>
   <body>
-    <button><a href="/logout/">Logout</a></button>
-    <h1>Ticket System</h1>
-    {{ request.user }}
-    <button><a href="/addticket/">Post Ticket</a></button>
-    <div id="new-ticket-div">
-      <h2>New Tickets</h2>
-      <ul>
-        {% for ticket in new %}
-        <li>
-          # {{ticket.id}} | Title:
-          <a href="/ticket/{{ ticket.id }}">{{ticket.title}}</a> | Status:
-          {{ticket.status}} | Assigned to: | Created by:
-          <a href="/profile/{{ ticket.author.id }}">{{ticket.author}}</a>
-          | Ticket Age: {{ticket.date}}
-        </li>
-        {% endfor %}
-      </ul>
-    </div>
-    <div id="in-progress-div">
-      <h2>In Progress Tickets</h2>
-      <ul>
-        {% for ticket in in_progress %}
-        <li>
-          # {{ticket.id}} | Title:
-          <a href="/ticket/{{ ticket.id }}">{{ticket.title}}</a> | Status:
-          {{ticket.status}} | Assigned to:
-          <a href="/profile/{{ ticket.assigned_to.id }}"
-            >{{ticket.assigned_to}}</a
-          >| Reported by:
-          <a href="/profile/{{ ticket.author.id }}">{{ticket.author}}</a>
-          | Ticket Age: {{ticket.date}}
-        </li>
-        {% endfor %}
-      </ul>
-    </div>
-    <div id="done-div">
-      <h2>Completed Tickets</h2>
-      <ul>
-        {% for ticket in done %}
-        <li>
-          # {{ticket.id}} | Title:
-          <a href="/ticket/{{ ticket.id }}">{{ticket.title}}</a> | Status:
-          {{ticket.status}} | Completed by:
-          <a href="/profile/{{ ticket.completed_by.id }}"
-            >{{ticket.completed_by}}</a
+    <div class="container">
+      <button class="btn btn-secondary mt-3">
+        <a href="/logout/" class="text-decoration-none text-white">Logout</a>
+      </button>
+      <h1 class="d-flex justify-content-center">Ticket System</h1>
+      <h3 class="d-flex justify-content-center text-info">
+        Welcome {{ request.user }}!
+      </h3>
+      <p>
+        <strong>View your tickets:</strong
+        ><a href="/profile/{{ request.user.id }}">Tickets</a>
+      </p>
+      <div class="row d-flex justify-content-end">
+        <button type="button" class="btn btn-primary mr-3 mb-3">
+          <a href="/addticket/" class="text-decoration-none text-white"
+            >Submit a Ticket</a
           >
-          | Created by:
-          <a href="/profile/{{ ticket.author.id }}">{{ticket.author}}</a>
-          | Ticket Age: {{ticket.date}}
-        </li>
-        {% endfor %}
-      </ul>
-    </div>
-    <div id="invalid-ticket-div">
-      <h2>Invalid Tickets</h2>
-      <ul>
-        {% for ticket in invalid %}
-        <li>
-          # {{ticket.id}} | Title:
-          <a href="/ticket/{{ ticket.id }}">{{ticket.title}}</a> | Status:
-          {{ticket.status}} | Assigned to: | Created by:
-          <a href="/profile/{{ ticket.author.id }}">{{ticket.author}}</a>
-          | Ticket Age: {{ticket.date}}
-        </li>
-        {% endfor %}
-      </ul>
+        </button>
+      </div>
+      <div id="new-ticket-div" class="shadow p-3 mb-5 bg-white rounded">
+        <h2>New Tickets</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Title</th>
+              <th scope="col">Assigned To</th>
+              <th scope="col">Reported By</th>
+              <th scope="col">Ticket Age</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ticket in tickets.new %}
+            <tr>
+              <th scope="row">{{ ticket.id }}</th>
+              <td><a href="/ticket/{{ ticket.id }}">{{ticket.title}}</a></td>
+              <td>
+                <!-- <a href="/profile/{{ ticket.assigned_to.id }}"
+                  >{{ticket.assigned_to}}</a
+                > -->
+              </td>
+              <td>
+                <a href="/profile/{{ ticket.author.id }}">{{ticket.author}}</a>
+              </td>
+              <td>{{ ticket.date }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div id="in-progress-div" class="shadow p-3 mb-5 bg-white rounded">
+        <h2>In Progress Tickets</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Title</th>
+              <th scope="col">Assigned To</th>
+              <th scope="col">Reported By</th>
+              <th scope="col">Ticket Age</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ticket in tickets.inP %}
+            <tr>
+              <th scope="row">{{ ticket.id }}</th>
+              <td><a href="/ticket/{{ ticket.id }}">{{ticket.title}}</a></td>
+              <td>
+                <a href="/profile/{{ ticket.assigned_to.id }}"
+                  >{{ticket.assigned_to}}</a
+                >
+              </td>
+              <td>
+                <a href="/profile/{{ ticket.author.id }}">{{ticket.author}}</a>
+              </td>
+              <td>{{ ticket.date }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div id="done-div" class="shadow p-3 mb-5 bg-white rounded">
+        <h2>Completed Tickets</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Title</th>
+              <th scope="col">Assigned To</th>
+              <th scope="col">Reported By</th>
+              <th scope="col">Ticket Age</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ticket in tickets.done %}
+            <tr>
+              <th scope="row">{{ ticket.id }}</th>
+              <td><a href="/ticket/{{ ticket.id }}">{{ticket.title}}</a></td>
+              <td>
+                <!-- <a href="/profile/{{ ticket.assigned_to.id }}"
+                  >{{ticket.assigned_to}}</a
+                > -->
+              </td>
+              <td>
+                <a href="/profile/{{ ticket.author.id }}">{{ticket.author}}</a>
+              </td>
+              <td>{{ ticket.date }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div id="invalid-ticket-div" class="shadow p-3 mb-5 bg-white rounded">
+        <h2>Invalid Tickets</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Title</th>
+              <th scope="col">Assigned To</th>
+              <th scope="col">Reported By</th>
+              <th scope="col">Ticket Age</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ticket in tickets.invalid %}
+            <tr>
+              <th scope="row">{{ ticket.id }}</th>
+              <td><a href="/ticket/{{ ticket.id }}">{{ticket.title}}</a></td>
+              <td>
+                <!-- <a href="/profile/{{ ticket.assigned_to.id }}"
+                  >{{ticket.assigned_to}}</a
+                > -->
+              </td>
+              <td>
+                <a href="/profile/{{ ticket.author.id }}">{{ticket.author}}</a>
+              </td>
+              <td>{{ ticket.date }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
   </body>
 </html>
