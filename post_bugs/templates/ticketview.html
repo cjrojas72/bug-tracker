@@ -29,7 +29,9 @@
           <div class="d-flex flex-column mr-5">
             <h3>Assigned to:</h3>
             <h4>
-              <a href="/profile/{{ data.author.id }}">{{ data.author }}</a>
+              <a href="/profile/{{ data.assigned_to.id }}"
+                >{{data.assigned_to}}</a
+              >
             </h4>
           </div>
           {% endif %}
@@ -78,9 +80,9 @@
             <h3>Info</h3>
             <hr />
             <p>Status: {{data.status}}</p>
-            <hr style="width: 50%;" />
+            <hr style="width: 50%" />
             <p>Submitted on: {{data.date}}</p>
-            <hr style="width: 50%;" />
+            <hr style="width: 50%" />
             <p>
               Reported by:
               <a href="/profile/{{ data.author.id}}">{{ data.author }}</a>
